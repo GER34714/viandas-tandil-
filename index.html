@@ -29,7 +29,7 @@
       --panel: rgba(255,255,255,.74);
       --panel-strong: rgba(255,255,255,.92);
       --text: #2f241d;
-      --muted: #735b4f;
+      --muted: #4b392f;
       --line: rgba(90, 64, 49, .12);
       --brand: #8f4f2c;
       --brand-2: #c9733b;
@@ -49,7 +49,7 @@
       --panel: rgba(36, 29, 26, .78);
       --panel-strong: rgba(33, 27, 24, .94);
       --text: #f6ece1;
-      --muted: #ceb7a3;
+      --muted: #ead9ca;
       --line: rgba(255, 236, 219, .10);
       --brand: #dda06e;
       --brand-2: #f0bc84;
@@ -69,7 +69,7 @@
         radial-gradient(circle at top left, rgba(201,115,59,.08), transparent 32%),
         radial-gradient(circle at bottom right, rgba(96,112,72,.08), transparent 28%),
         var(--bg);
-      color: var(--text); text-shadow: 0 1px 2px rgba(0,0,0,.22);
+      color: var(--text); text-shadow: 0 1px 2px rgba(0,0,0,.28);
       overflow-x: hidden;
     }
 
@@ -98,6 +98,11 @@
       backdrop-filter: blur(18px);
       background: color-mix(in srgb, var(--bg) 76%, transparent);
       border-bottom: 1px solid var(--line);
+      transition: transform .28s ease, background .22s ease;
+    }
+
+    .site-header.hide-on-scroll {
+      transform: translateY(calc(-100% - 8px));
     }
 
     .header-inner {
@@ -234,6 +239,41 @@
 
     .menu-toggle {
       display: none;
+    }
+
+    .brand-copy span,
+    .nav a,
+    .hero p,
+    .mini-stat span,
+    .section-head p,
+    .glass-card p,
+    .info-card p,
+    .step p,
+    .gallery-copy p,
+    .product-modal-copy p,
+    .ingredients-box ul,
+    .cart-sub,
+    .cart-empty,
+    .cart-item small,
+    .cart-summary,
+    .footer p,
+    .footer a {
+      color: color-mix(in srgb, var(--text) 76%, var(--bg-soft) 24%);
+      text-shadow: 0 1px 2px rgba(0,0,0,.34);
+    }
+
+    .hero p,
+    .section-head p {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
+      backdrop-filter: blur(4px);
+    }
+
+    body.dark .hero p,
+    body.dark .section-head p {
+      background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.12));
     }
 
     .hero {
@@ -1214,6 +1254,16 @@
       cursor: pointer;
     }
 
+    .cart-open-btn svg {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+    }
+
+    .cart-open-label {
+      font-weight: 800;
+    }
+
     .cart-badge {
       min-width: 26px;
       height: 26px;
@@ -1377,9 +1427,29 @@
     @media (max-width: 720px) {
       .cart-open-btn {
         right: 14px;
-        left: 14px;
+        left: auto;
         bottom: 88px;
+        width: 56px;
+        height: 56px;
+        padding: 0;
         justify-content: center;
+        border-radius: 999px;
+        gap: 0;
+      }
+      .cart-open-label {
+        display: none;
+      }
+      .cart-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 6px;
+        font-size: .78rem;
+        background: #fff;
+        color: var(--brand);
+        box-shadow: 0 10px 22px rgba(0,0,0,.18);
       }
       .cart-panel { width: 100%; }
     }
@@ -1450,18 +1520,20 @@
 
       body {
         background:
-          linear-gradient(rgba(247, 241, 232, 0.84), rgba(247, 241, 232, 0.84)),
-          url('https://iili.io/BOaG7jf.jpg') center center / cover no-repeat,
+          linear-gradient(rgba(247, 241, 232, 0.86), rgba(247, 241, 232, 0.86)),
+          url('https://iili.io/BOaG7jf.jpg') center top / 100% auto no-repeat,
           var(--bg);
         background-attachment: scroll;
+        background-color: var(--bg);
       }
 
       body.dark {
         background:
-          linear-gradient(rgba(24, 20, 18, 0.86), rgba(24, 20, 18, 0.86)),
-          url('https://iili.io/BOaG7jf.jpg') center center / cover no-repeat,
+          linear-gradient(rgba(24, 20, 18, 0.88), rgba(24, 20, 18, 0.88)),
+          url('https://iili.io/BOaG7jf.jpg') center top / 100% auto no-repeat,
           var(--bg);
         background-attachment: scroll;
+        background-color: var(--bg);
       }
 
 
@@ -2157,7 +2229,12 @@
 
 
   <button class="cart-open-btn" id="cartOpenBtn" type="button" aria-label="Abrir pedido">
-    <span>Ver pedido</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="9" cy="20" r="1.5"></circle>
+      <circle cx="17" cy="20" r="1.5"></circle>
+      <path d="M3 4h2l2.2 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.76L20 7H7.1"></path>
+    </svg>
+    <span class="cart-open-label">Ver pedido</span>
     <span class="cart-badge" id="cartCount">0</span>
   </button>
 
@@ -2206,6 +2283,7 @@
 
   <script>
     const body = document.body;
+    const siteHeader = document.querySelector('.site-header');
     const menuToggle = document.getElementById('menuToggle');
     const mobileNav = document.getElementById('mobileNav');
     const themeToggle = document.getElementById('themeToggle');
@@ -2267,6 +2345,33 @@
     }, { threshold: 0.18 });
 
     observer.observe(footer);
+
+    let lastScrollY = window.scrollY;
+    const handleHeaderVisibility = () => {
+      if (!siteHeader) return;
+      const currentScrollY = window.scrollY;
+      const isMobile = window.innerWidth <= 820;
+
+      if (!isMobile) {
+        siteHeader.classList.remove('hide-on-scroll');
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      if (mobileNav.classList.contains('open') || cartPanel.classList.contains('open') || productModal.classList.contains('open')) {
+        siteHeader.classList.remove('hide-on-scroll');
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY > lastScrollY && currentScrollY > 90) {
+        siteHeader.classList.add('hide-on-scroll');
+      } else {
+        siteHeader.classList.remove('hide-on-scroll');
+      }
+
+      lastScrollY = currentScrollY;
+    };
 
     const initCarousel = (rootSelector, trackSelector, slideSelector, prevSelector, nextSelector, dotsSelector, interval = 5000) => {
       const root = document.querySelector(rootSelector);
@@ -2580,7 +2685,12 @@
 
     renderCart();
     setActiveLink();
-    window.addEventListener('scroll', setActiveLink, { passive: true });
+    handleHeaderVisibility();
+    window.addEventListener('scroll', () => {
+      setActiveLink();
+      handleHeaderVisibility();
+    }, { passive: true });
+    window.addEventListener('resize', handleHeaderVisibility);
   </script>
 </body>
 </html>

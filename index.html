@@ -1493,6 +1493,51 @@
       object-fit: contain;
     }
 
+
+
+    .section-cut {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .section-cut .section-shell {
+      position: relative;
+      padding: 30px 0;
+      border-radius: 34px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.18));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 20px 45px rgba(45, 28, 17, .08);
+      backdrop-filter: blur(6px);
+      overflow: hidden;
+    }
+
+    .section-cut .section-shell::before {
+      content: "";
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(143,79,44,.26), transparent);
+    }
+
+    .section-cut .section-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto 22px 0 22px;
+      height: 18px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,.10));
+      pointer-events: none;
+    }
+
+    .section-cut.warm .section-shell {
+      background: linear-gradient(180deg, rgba(201,115,59,.08), rgba(255,255,255,.16));
+    }
+
+    .section-cut.olive .section-shell {
+      background: linear-gradient(180deg, rgba(96,112,72,.08), rgba(255,255,255,.16));
+    }
+
     @keyframes shine {
       0% { transform: translateX(-120%); }
       45%, 100% { transform: translateX(120%); }
@@ -1680,6 +1725,20 @@
       .container {
         width: min(calc(100% - 20px), var(--container));
       }
+      .section-cut {
+        padding: 14px 0;
+      }
+
+      .section-cut .section-shell {
+        border-radius: 24px;
+        padding: 22px 0;
+      }
+
+      .section-cut .section-shell::before {
+        left: 18px;
+        right: 18px;
+      }
+
 
       .hero-copy {
         padding: 22px 18px;
@@ -1905,7 +1964,8 @@
       </div>
     </section>
 
-    <section class="image-carousel-section" aria-label="Carrusel de menus semanales">
+    <section class="image-carousel-section section-cut warm" aria-label="Carrusel de menus semanales">
+      <div class="container section-shell">
       <div class="container">
         <div class="section-head" style="margin-bottom:16px;">
           <div>
@@ -1937,9 +1997,11 @@
           <div class="carousel-status" id="menuCarouselStatus" aria-live="polite">Menu 1 de 4</div>
         </div>
       </div>
+      </div>
     </section>
 
-    <section>
+    <section class="section-cut">
+      <div class="container section-shell">
       <div class="container">
         <div class="section-head">
           <div>
@@ -1985,10 +2047,12 @@
           </article>
         </div>
       </div>
+      </div>
     </section>
 
 
-    <section id="platos">
+    <section id="platos" class="section-cut olive">
+      <div class="container section-shell">
       <div class="container">
         <div class="section-head">
           <div>
@@ -2235,9 +2299,11 @@
           </div>
         </div></div>
       </div>
+      </div>
     </section>
 
-    <section>
+    <section class="section-cut">
+      <div class="container section-shell">
       <div class="container info-grid">
         <article class="info-card">
           <div class="eyebrow">Contacto</div>
@@ -2271,9 +2337,11 @@
           </div>
         </article>
       </div>
+      </div>
     </section>
 
-    <section id="como-pedir">
+    <section id="como-pedir" class="section-cut warm">
+      <div class="container section-shell">
       <div class="container">
         <div class="section-head">
           <div>
@@ -2301,9 +2369,11 @@
           </article>
         </div>
       </div>
+      </div>
     </section>
 
-    <section>
+    <section class="section-cut olive">
+      <div class="container section-shell">
       <div class="container">
         <div class="cta-panel">
           <div>
@@ -2316,6 +2386,7 @@
             <a class="outline-btn" href="#platos">Ver platos</a>
           </div>
         </div>
+      </div>
       </div>
     </section>
   </main>

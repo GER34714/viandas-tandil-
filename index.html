@@ -44,18 +44,18 @@
     }
 
     body.dark {
-      --bg: #181412;
-      --bg-soft: #211b18;
-      --panel: rgba(36, 29, 26, .78);
-      --panel-strong: rgba(33, 27, 24, .94);
-      --text: #f6ece1;
-      --muted: #ead9ca;
-      --line: rgba(255, 236, 219, .10);
-      --brand: #dda06e;
-      --brand-2: #f0bc84;
-      --accent: #93a975;
-      --dark: #0f0d0c;
-      --shadow: 0 20px 50px rgba(0, 0, 0, .30);
+      --bg: #2b221d;
+      --bg-soft: #342923;
+      --panel: rgba(58, 46, 39, .72);
+      --panel-strong: rgba(66, 53, 45, .88);
+      --text: #fff4ea;
+      --muted: #f0ddcf;
+      --line: rgba(255, 236, 219, .14);
+      --brand: #e1a16b;
+      --brand-2: #f2be86;
+      --accent: #a3ba84;
+      --dark: #201914;
+      --shadow: 0 20px 50px rgba(0, 0, 0, .22);
     }
 
     * { box-sizing: border-box; }
@@ -75,10 +75,10 @@
 
     body.dark {
       background:
-        linear-gradient(rgba(24, 20, 18, 0.84), rgba(24, 20, 18, 0.84)),
+        linear-gradient(rgba(43, 34, 29, 0.68), rgba(43, 34, 29, 0.68)),
         url('https://iili.io/BO0DZaj.jpg') center center / cover fixed no-repeat,
-        radial-gradient(circle at top left, rgba(240,188,132,.08), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(147,169,117,.07), transparent 28%),
+        radial-gradient(circle at top left, rgba(240,188,132,.10), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(163,186,132,.08), transparent 30%),
         var(--bg);
     }
 
@@ -202,6 +202,8 @@
     }
 
     .icon-btn svg { width: 22px; height: 22px; }
+    .menu-toggle svg { transition: transform .22s ease, opacity .22s ease; }
+    .menu-toggle.is-open svg { transform: rotate(90deg); }
 
     .cta-btn,
     .outline-btn {
@@ -1558,26 +1560,52 @@
 
       .nav-wrap {
         position: fixed;
-        top: calc(var(--header-h) + 10px);
-        left: 16px;
-        right: 16px;
-        padding: 14px;
-        border-radius: 22px;
-        background: var(--panel-strong);
-        border: 1px solid var(--line);
-        box-shadow: var(--shadow);
+        inset: 0;
+        padding: calc(var(--header-h) + 20px) 20px 24px;
+        background: color-mix(in srgb, var(--bg-soft) 94%, transparent);
+        backdrop-filter: blur(18px);
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
         flex-direction: column;
         align-items: stretch;
+        justify-content: flex-start;
         opacity: 0;
         pointer-events: none;
-        transform: translateY(-8px);
-        transition: .22s ease;
+        transform: translateY(-10px);
+        transition: opacity .22s ease, transform .22s ease;
+        z-index: 45;
+        overflow-y: auto;
       }
 
       .nav-wrap.open {
         opacity: 1;
         pointer-events: auto;
         transform: translateY(0);
+      }
+
+      body.menu-open {
+        overflow: hidden;
+      }
+
+      .site-header.menu-open .brand {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .site-header.menu-open {
+        background: transparent;
+        border-bottom-color: transparent;
+        backdrop-filter: none;
+      }
+
+      .site-header.menu-open .header-inner {
+        justify-content: flex-end;
+      }
+
+      .site-header.menu-open .menu-toggle {
+        position: relative;
+        z-index: 60;
       }
 
       .nav {
@@ -1818,13 +1846,7 @@
         </nav>
 
         <div class="header-actions">
-          <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema">
-            <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4.5"></circle>
-              <path d="M12 2v2.2M12 19.8V22M4.93 4.93l1.56 1.56M17.5 17.5l1.57 1.57M2 12h2.2M19.8 12H22M4.93 19.07l1.56-1.56M17.5 6.5l1.57-1.57"></path>
-            </svg>
-          </button>
-          <a class="outline-btn" href="#catalogo">Ver menu</a>
+<a class="outline-btn" href="#catalogo">Ver menu</a>
           <a class="cta-btn" href="https://wa.me/542494366061?text=Hola%20Viandas%20Tandil%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
         </div>
       </div>
@@ -2303,10 +2325,11 @@
 
   <script>
     const body = document.body;
+    body.classList.remove('dark');
+    try { localStorage.removeItem('viandas-theme'); } catch (e) {}
     const siteHeader = document.querySelector('.site-header');
     const menuToggle = document.getElementById('menuToggle');
     const mobileNav = document.getElementById('mobileNav');
-    const themeToggle = document.getElementById('themeToggle');
     const waFloat = document.getElementById('waFloat');
     const footer = document.querySelector('.footer');
     const navLinks = document.querySelectorAll('.nav a');
@@ -2332,25 +2355,31 @@
     const sendOrderBtn = document.getElementById('sendOrderBtn');
     const clearCartBtn = document.getElementById('clearCartBtn');
 
-    const savedTheme = localStorage.getItem('viandas-theme');
-    if (savedTheme === 'dark') body.classList.add('dark');
-
-    themeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark');
-      localStorage.setItem('viandas-theme', body.classList.contains('dark') ? 'dark' : 'light');
-    });
-
     menuToggle.addEventListener('click', () => {
-      mobileNav.classList.toggle('open');
+      const isOpen = mobileNav.classList.toggle('open');
+      body.classList.toggle('menu-open', isOpen);
+      siteHeader.classList.toggle('menu-open', isOpen);
+      menuToggle.classList.toggle('is-open', isOpen);
+      menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menu' : 'Abrir menu');
     });
 
     navLinks.forEach(link => {
-      link.addEventListener('click', () => mobileNav.classList.remove('open'));
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        body.classList.remove('menu-open');
+        siteHeader.classList.remove('menu-open');
+        menuToggle.classList.remove('is-open');
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
+      });
     });
 
     window.addEventListener('click', (e) => {
       if (!mobileNav.contains(e.target) && !menuToggle.contains(e.target)) {
         mobileNav.classList.remove('open');
+        body.classList.remove('menu-open');
+        siteHeader.classList.remove('menu-open');
+        menuToggle.classList.remove('is-open');
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
       }
     });
 
@@ -2513,10 +2542,20 @@
         start();
       });
 
+      let resumeTimer = null;
+      const scheduleResume = () => {
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(start, 3500);
+      };
       shell.addEventListener('mouseenter', stop);
       shell.addEventListener('mouseleave', start);
       shell.addEventListener('touchstart', stop, { passive: true });
-      shell.addEventListener('touchend', start, { passive: true });
+      shell.addEventListener('touchend', scheduleResume, { passive: true });
+      shell.addEventListener('pointerdown', stop);
+      shell.addEventListener('pointerup', scheduleResume);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop(); else start();
+      });
 
       window.addEventListener('resize', () => {
         buildDots();
@@ -2699,6 +2738,13 @@
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && productModal.classList.contains('open')) closeModal();
       if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart();
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        mobileNav.classList.remove('open');
+        body.classList.remove('menu-open');
+        siteHeader.classList.remove('menu-open');
+        menuToggle.classList.remove('is-open');
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
+      }
     });
 
     renderCart();
